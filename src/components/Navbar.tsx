@@ -44,7 +44,8 @@ export default function Navbar() {
             src="/navibar.png"
             alt="Dreamlight Films"
             width={120}
-            height={30}
+            height={29}
+            priority
             className="h-29 w-auto object-contain"
           />
         </Link>
@@ -64,14 +65,14 @@ export default function Navbar() {
               {link.name}
             </Link>
           ))}
-          <a
+          <Link
             href="/#contact"
             className={`text-xs btn-primary ${
               scrolled ? "" : "!bg-white !text-fg hover:!bg-accent hover:!text-white"
             }`}
           >
             Book Now
-          </a>
+          </Link>
         </div>
 
         {/* Hamburger */}
@@ -128,13 +129,13 @@ export default function Navbar() {
               {link.name}
             </Link>
           ))}
-          <a
+          <Link
             href="/#contact"
             onClick={() => setMobileOpen(false)}
             className="btn-primary w-full mt-4 text-xs"
           >
             Book Now
-          </a>
+          </Link>
         </div>
       </div>
     </header>

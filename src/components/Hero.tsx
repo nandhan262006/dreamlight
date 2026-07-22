@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 
 const fadeUp = (delay: number) => ({
   hidden: { opacity: 0, y: 30 },
@@ -137,18 +138,18 @@ export default function Hero() {
           animate="visible"
           className="flex flex-col sm:flex-row items-start gap-4"
         >
-          <a
+          <Link
             href="/#gallery"
             className="btn-primary !bg-accent !text-white hover:!bg-accent-light border-0 text-xs px-8 py-3.5 rounded-none"
           >
             View Gallery
-          </a>
-          <a
+          </Link>
+          <Link
             href="/#contact"
             className="btn-outline !border-white/40 !text-white hover:!bg-white hover:!text-fg text-xs px-8 py-3.5 rounded-none"
           >
             Get in Touch
-          </a>
+          </Link>
         </motion.div>
       </div>
 
