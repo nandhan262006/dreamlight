@@ -3,6 +3,7 @@ import { Playfair_Display, Montserrat } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -17,7 +18,7 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   title: "Dreamlight Films | Premium Wedding Photography & Cinematic Films",
   description:
-    "Award-winning wedding photography and cinematic films. Capturing authentic emotions, timeless traditions, and memories that last a lifetime.",
+    "Ongole's finest wedding photography, travelling across AP, Telangana and worldwide. Wedding photography and cinematic films — capturing authentic emotions, timeless traditions, and memories that last a lifetime.",
   keywords: [
     "wedding photography",
     "cinematic wedding films",
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Dreamlight Films | Premium Wedding Photography & Cinematic Films",
     description:
-      "Award-winning wedding photography and cinematic films. Capturing authentic emotions, timeless traditions, and memories that last a lifetime.",
+      "Ongole's finest wedding photography, travelling across AP, Telangana and worldwide. Wedding photography and cinematic films — capturing authentic emotions, timeless traditions, and memories that last a lifetime.",
     type: "website",
   },
 };
@@ -44,6 +45,7 @@ export default function RootLayout({
         <Navbar />
         {children}
         <Footer />
+        <WhatsAppButton />
       </body>
     </html>
   );
