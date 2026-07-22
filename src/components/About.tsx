@@ -13,6 +13,7 @@ export default function About() {
               src="/about.png"
               alt="About Dreamlight Films"
               fill
+              priority
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 50vw"
             />

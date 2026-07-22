@@ -33,7 +33,7 @@ export default function Hero() {
         alt="Wedding photography hero"
         fill
         className="object-cover block md:hidden"
-        sizes="100vw"
+        sizes="(max-width: 768px) 100vw, 0vw"
       />
 
       {/* Gradient overlays */}
