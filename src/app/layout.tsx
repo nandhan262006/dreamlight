@@ -31,6 +31,7 @@ export const metadata: Metadata = {
     description:
       "Ongole's finest wedding photography, travelling across AP, Telangana and worldwide. Wedding photography and cinematic films — capturing authentic emotions, timeless traditions, and memories that last a lifetime.",
     type: "website",
+    images: [{ url: "/og-image.png", width: 1540, height: 1021 }],
   },
 };
 
