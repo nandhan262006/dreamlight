@@ -16,6 +16,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://dreamlight-nine.vercel.app"),
   title: "Dreamlight Films | Premium Wedding Photography & Cinematic Films",
   description:
     "Ongole's finest wedding photography, travelling across AP, Telangana and worldwide. Wedding photography and cinematic films — capturing authentic emotions, timeless traditions, and memories that last a lifetime.",
@@ -25,13 +26,22 @@ export const metadata: Metadata = {
     "wedding videographer",
     "luxury wedding",
     "Dreamlight Films",
+    "Ongole wedding photographer",
   ],
   openGraph: {
     title: "Dreamlight Films | Premium Wedding Photography & Cinematic Films",
     description:
       "Ongole's finest wedding photography, travelling across AP, Telangana and worldwide. Wedding photography and cinematic films — capturing authentic emotions, timeless traditions, and memories that last a lifetime.",
     type: "website",
+    siteName: "Dreamlight Films",
     images: [{ url: "/og-image.png", width: 1540, height: 1021 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Dreamlight Films | Premium Wedding Photography & Cinematic Films",
+    description:
+      "Ongole's finest wedding photography, travelling across AP, Telangana and worldwide.",
+    images: ["/og-image.png"],
   },
 };
 
