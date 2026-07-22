@@ -37,8 +37,8 @@ export default function Hero() {
       />
 
       {/* Gradient overlays */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-black/10" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/40" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30" />
 
       {/* Decorative frame corners - hidden on small mobile */}
       <div className="hidden sm:block absolute top-8 left-8 w-16 h-16 border-t-2 border-l-2 border-white/20 z-10" />
@@ -88,7 +88,7 @@ export default function Hero() {
           variants={fadeUp(0.4)}
           initial="hidden"
           animate="visible"
-          className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white leading-[1.1] tracking-tight"
+          className="font-serif font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white leading-[1.1] tracking-tight drop-shadow-[0_0_15px_rgba(255,255,255,0.15)]"
         >
           Every Love Story
           <br />
@@ -114,7 +114,7 @@ export default function Hero() {
           variants={fadeUp(0.8)}
           initial="hidden"
           animate="visible"
-          className="text-white/70 text-sm sm:text-base md:text-lg max-w-xl leading-relaxed mb-8"
+          className="text-white font-semibold text-sm sm:text-base md:text-lg max-w-xl leading-relaxed mb-8 drop-shadow-[0_0_8px_rgba(255,255,255,0.15)]"
         >
           Capturing authentic emotions, timeless traditions, and cinematic
           memories — from Hyderabad to destinations worldwide.
@@ -125,9 +125,9 @@ export default function Hero() {
           variants={fadeUp(1.0)}
           initial="hidden"
           animate="visible"
-          className="text-white/60 text-xs uppercase tracking-[0.25em] mb-8"
+          className="text-white text-xs font-semibold uppercase tracking-[0.25em] mb-8"
         >
-          Hyderabad &bull; Telangana &bull; Worldwide
+          AP <span className="text-accent">&middot;</span> Telangana <span className="text-accent">&middot;</span> Worldwide
         </motion.p>
 
         {/* Buttons */}

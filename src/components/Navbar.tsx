@@ -45,7 +45,7 @@ export default function Navbar() {
             alt="Dreamlight Films"
             width={120}
             height={30}
-            className="h-16 w-auto object-contain"
+            className="h-29 w-auto object-contain"
           />
         </Link>
 
