@@ -93,7 +93,7 @@ export default function Footer() {
                   href="tel:+919573466266"
                   className="hover:text-accent transition-colors"
                 >
-                  +91 95734 66266
+                  +91 90103 34999
                 </a>
               </li>
               <li>
@@ -113,7 +113,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-12 pt-6 border-t border-bg/10 flex flex-col sm:flex-row justify-between items-center gap-2 text-sm text-bg/40">
           <p>&copy; {new Date().getFullYear()} Dreamlight Films. All rights reserved.</p>
-          <p>Hyderabad, Telangana &bull; Available Worldwide</p>
+          <p>Opp: Sai Saroj Mayuri Theatre, Vamsi Complex, Shop No.5, Ongole</p>
         </div>
       </div>
     </footer>

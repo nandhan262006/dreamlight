@@ -12,6 +12,7 @@ const navLinks = [
   { name: "Stories", href: "/stories" },
   { name: "Reviews", href: "/#reviews" },
   { name: "Contact", href: "/#contact" },
+  { name: "Admin", href: "/admin/login" },
 ];
 
 export default function Navbar() {

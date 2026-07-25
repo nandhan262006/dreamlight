@@ -13,41 +13,41 @@ const fadeUp = (delay: number) => ({
   },
 });
 
-export default function Hero() {
+interface HeroProps {
+  desktopImage?: string;
+  mobileImage?: string;
+}
+
+export default function Hero({ desktopImage = "/home.png", mobileImage = "/homemobile.png" }: HeroProps) {
   return (
     <section
       id="home"
       className="relative h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* Background - Desktop */}
       <Image
-        src="/home.png"
+        src={desktopImage}
         alt="Wedding photography hero"
         fill
-        preload
+        priority
         className="object-cover hidden md:block"
         sizes="100vw"
       />
-      {/* Background - Mobile */}
       <Image
-        src="/homemobile.png"
+        src={mobileImage}
         alt="Wedding photography hero"
         fill
         className="object-cover block md:hidden"
         sizes="(max-width: 768px) 100vw, 0vw"
       />
 
-      {/* Gradient overlays */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent" />
       <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30" />
 
-      {/* Decorative frame corners - hidden on small mobile */}
       <div className="hidden sm:block absolute top-8 left-8 w-16 h-16 border-t-2 border-l-2 border-white/20 z-10" />
       <div className="hidden sm:block absolute top-8 right-8 w-16 h-16 border-t-2 border-r-2 border-white/20 z-10" />
       <div className="hidden sm:block absolute bottom-8 left-8 w-16 h-16 border-b-2 border-l-2 border-white/20 z-10" />
       <div className="hidden sm:block absolute bottom-8 right-8 w-16 h-16 border-b-2 border-r-2 border-white/20 z-10" />
 
-      {/* Floating gold diamond */}
       <motion.div
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -69,9 +69,7 @@ export default function Hero() {
         </svg>
       </motion.div>
 
-      {/* Content */}
       <div className="relative z-10 w-full max-w-4xl px-6 lg:px-16 -mt-16">
-        {/* Overline */}
         <motion.div
           variants={fadeUp(0.2)}
           initial="hidden"
@@ -80,11 +78,10 @@ export default function Hero() {
         >
           <span className="h-px w-6 sm:w-8 bg-accent/60" />
           <span className="text-accent text-[10px] sm:text-xs uppercase tracking-[0.25em] font-semibold">
-            Wedding Photography &amp; Cinematic Films
+            Wedding Photography &amp; Videography
           </span>
         </motion.div>
 
-        {/* Main heading */}
         <motion.h1
           variants={fadeUp(0.4)}
           initial="hidden"
@@ -93,10 +90,9 @@ export default function Hero() {
         >
           Every Love Story
           <br />
-          <span className="text-accent">Deserves to Be Told</span>
+          <span className="text-white">Deserves to Be Told</span>
         </motion.h1>
 
-        {/* Gold divider */}
         <motion.div
           initial={{ opacity: 0, scaleX: 0 }}
           animate={{ opacity: 1, scaleX: 1 }}
@@ -110,7 +106,6 @@ export default function Hero() {
           <span className="h-px w-10 sm:w-12 bg-white/20" />
         </motion.div>
 
-        {/* Subtitle */}
         <motion.p
           variants={fadeUp(0.8)}
           initial="hidden"
@@ -118,20 +113,18 @@ export default function Hero() {
           className="text-white font-semibold text-sm sm:text-base md:text-lg max-w-xl leading-relaxed mb-8 drop-shadow-[0_0_8px_rgba(255,255,255,0.15)]"
         >
           Capturing authentic emotions, timeless traditions, and cinematic
-          memories — from Hyderabad to destinations worldwide.
+          memories — serving Ongole, Guntur, Vijayawada, and Hyderabad.
         </motion.p>
 
-        {/* Location */}
         <motion.p
           variants={fadeUp(1.0)}
           initial="hidden"
           animate="visible"
           className="text-white text-xs font-semibold uppercase tracking-[0.25em] mb-8"
         >
-          AP <span className="text-accent">&middot;</span> Telangana <span className="text-accent">&middot;</span> Worldwide
+          Ongole <span className="text-accent">&middot;</span> Guntur <span className="text-accent">&middot;</span> Vijayawada <span className="text-accent">&middot;</span> Hyderabad
         </motion.p>
 
-        {/* Buttons */}
         <motion.div
           variants={fadeUp(1.2)}
           initial="hidden"
@@ -153,7 +146,6 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
       <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2">
         <span className="text-[10px] tracking-[0.3em] text-white/40 uppercase">
           Scroll

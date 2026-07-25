@@ -7,10 +7,13 @@ interface Service {
   title: string;
   description: string;
   imageUrl: string;
+  category: string;
 }
 
 interface ServiceCards3DProps {
   services: Service[];
+  onOverflowNext?: () => void;
+  onOverflowPrev?: () => void;
 }
 
 function getCardStyle(offset: number) {
@@ -40,6 +43,7 @@ const serviceList: Service[] = [
     description:
       "Cinematic coverage of your entire wedding day, from preparation to the final dance.",
     imageUrl: "/gallery1.png",
+    category: "Photography",
   },
   {
     id: "prewedding",
@@ -47,6 +51,7 @@ const serviceList: Service[] = [
     description:
       "Romantic storytelling sessions at breathtaking locations before the big day.",
     imageUrl: "/gallery2.png",
+    category: "Photography",
   },
   {
     id: "portrait",
@@ -54,6 +59,7 @@ const serviceList: Service[] = [
     description:
       "Professional portraits that capture your personality with artistic lighting.",
     imageUrl: "/gallery3.png",
+    category: "Photography",
   },
   {
     id: "events",
@@ -61,6 +67,7 @@ const serviceList: Service[] = [
     description:
       "Live-event photography for engagements, anniversaries, and celebrations.",
     imageUrl: "/gallery4.png",
+    category: "Photography",
   },
   {
     id: "maternity",
@@ -68,10 +75,11 @@ const serviceList: Service[] = [
     description:
       "Heartwarming maternity and newborn sessions preserving life's earliest moments.",
     imageUrl: "/gallery5.png",
+    category: "Photography",
   },
 ];
 
-function ServiceCards3D({ services }: ServiceCards3DProps) {
+function ServiceCards3D({ services, onOverflowNext, onOverflowPrev }: ServiceCards3DProps) {
   const [active, setActive] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const dragStart = useRef(0);
@@ -84,13 +92,19 @@ function ServiceCards3D({ services }: ServiceCards3DProps) {
   );
 
   const goNext = useCallback(
-    () => setActive((a) => clamped(a + 1)),
-    [clamped]
+    () => setActive((a) => {
+      if (a >= services.length - 1) { onOverflowNext?.(); return a; }
+      return a + 1;
+    }),
+    [services.length, onOverflowNext]
   );
 
   const goPrev = useCallback(
-    () => setActive((a) => clamped(a - 1)),
-    [clamped]
+    () => setActive((a) => {
+      if (a <= 0) { onOverflowPrev?.(); return a; }
+      return a - 1;
+    }),
+    [onOverflowPrev]
   );
 
   const handlePointerDown = useCallback((e: React.PointerEvent) => {
@@ -110,6 +124,21 @@ function ServiceCards3D({ services }: ServiceCards3DProps) {
 
   const handlePointerUp = useCallback(() => { dragging.current = false; }, []);
   const handlePointerLeave = useCallback(() => { dragging.current = false; }, []);
+
+  const touchStart = useRef(0);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStart.current = e.touches[0].clientX;
+  }, []);
+
+  const handleTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      const delta = touchStart.current - e.changedTouches[0].clientX;
+      if (delta > 50) goNext();
+      else if (delta < -50) goPrev();
+    },
+    [goNext, goPrev]
+  );
 
   const handleWheel = useCallback(
     (e: WheelEvent) => {
@@ -144,12 +173,14 @@ function ServiceCards3D({ services }: ServiceCards3DProps) {
           style={{ perspective: "1200px" }}
         >
           <div
-            className="relative w-full h-full flex items-center justify-center"
+            className="relative w-full h-full flex items-center justify-center touch-pan-y"
             style={{ transformStyle: "preserve-3d" }}
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             onPointerLeave={handlePointerLeave}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
           >
             {services.map((service, i) => {
               const offset = i - active;
@@ -178,10 +209,10 @@ function ServiceCards3D({ services }: ServiceCards3DProps) {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 z-10">
-                    <h3 className="font-serif text-xl sm:text-2xl text-white">{service.title}</h3>
-                    <p className="text-white/70 text-xs sm:text-sm mt-2 leading-relaxed">
-                      {service.description}
+                    <p className="text-white/50 text-[10px] uppercase tracking-[0.15em] font-semibold mb-1">
+                      {service.category}
                     </p>
+                    <h3 className="font-serif text-xl sm:text-2xl text-white">{service.title}</h3>
                   </div>
                 </div>
               );

@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Montserrat } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import WhatsAppButton from "@/components/WhatsAppButton";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -17,30 +14,31 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://dreamlight-nine.vercel.app"),
-  title: "Dreamlight Films | Premium Wedding Photography & Cinematic Films",
+  title: "Dreamlight Films | Wedding Photography & Videography in Ongole",
   description:
-    "Ongole's finest wedding photography, travelling across AP, Telangana and worldwide. Wedding photography and cinematic films — capturing authentic emotions, timeless traditions, and memories that last a lifetime.",
+    "Professional wedding photography and videography in Ongole, Guntur, Vijayawada, and Hyderabad. Capturing authentic emotions, timeless traditions, and cinematic memories.",
   keywords: [
     "wedding photography",
-    "cinematic wedding films",
-    "wedding videographer",
-    "luxury wedding",
+    "wedding videography",
+    "photographer in Ongole",
+    "photographer in Guntur",
+    "photographer in Vijayawada",
+    "photographer in Hyderabad",
     "Dreamlight Films",
-    "Ongole wedding photographer",
   ],
   openGraph: {
-    title: "Dreamlight Films | Premium Wedding Photography & Cinematic Films",
+    title: "Dreamlight Films | Wedding Photography & Videography in Ongole",
     description:
-      "Ongole's finest wedding photography, travelling across AP, Telangana and worldwide. Wedding photography and cinematic films — capturing authentic emotions, timeless traditions, and memories that last a lifetime.",
+      "Professional wedding photography and videography in Ongole, Guntur, Vijayawada, and Hyderabad. Capturing authentic emotions, timeless traditions, and cinematic memories.",
     type: "website",
     siteName: "Dreamlight Films",
     images: [{ url: "/og-image.png", width: 1540, height: 1021 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Dreamlight Films | Premium Wedding Photography & Cinematic Films",
+    title: "Dreamlight Films | Wedding Photography & Videography in Ongole",
     description:
-      "Ongole's finest wedding photography, travelling across AP, Telangana and worldwide.",
+      "Professional wedding photography and videography in Ongole, Guntur, Vijayawada, and Hyderabad.",
     images: ["/og-image.png"],
   },
 };
@@ -53,10 +51,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${playfair.variable} ${montserrat.variable} antialiased`}>
       <body className="bg-bg text-fg font-sans antialiased overflow-x-hidden">
-        <Navbar />
         {children}
-        <Footer />
-        <WhatsAppButton />
       </body>
     </html>
   );

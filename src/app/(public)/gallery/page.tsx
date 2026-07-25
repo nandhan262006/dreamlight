@@ -1,25 +1,50 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 
-const allImages = [
-  { src: "/gallery1.png", alt: "Wedding ceremony portrait", category: "Wedding", title: "Sacred Union" },
-  { src: "/gallery2.png", alt: "Bride closeup", category: "Portrait", title: "Radiant Smile" },
-  { src: "/gallery3.png", alt: "Couple embrace", category: "Couple", title: "Eternal Bond" },
-  { src: "/gallery4.png", alt: "Wedding decor details", category: "Details", title: "Golden Elegance" },
-  { src: "/gallery5.png", alt: "Reception celebration", category: "Wedding", title: "Celebration" },
-  { src: "/gallery6.png", alt: "First dance moment", category: "Couple", title: "First Dance" },
-  { src: "/gallery7.png", alt: "Bridal jewelry details", category: "Details", title: "Heirloom" },
-  { src: "/gallery.png", alt: "Ceremony highlights", category: "Wedding", title: "Sacred Vows" },
-  { src: "/gallery3.png", alt: "Golden hour portrait", category: "Portrait", title: "Golden Hour" },
-];
+interface GalleryImage {
+  src: string;
+  alt: string;
+  category: string;
+  title: string;
+}
 
-const categories = ["All", "Wedding", "Portrait", "Couple", "Details"];
+interface Category {
+  id: number;
+  name: string;
+  type: string;
+  order: number;
+}
 
 export default function GalleryPage() {
+  const [allImages, setAllImages] = useState<GalleryImage[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
   const [activeCat, setActiveCat] = useState("All");
   const [lightbox, setLightbox] = useState<number | null>(null);
+
+  useEffect(() => {
+    Promise.all([
+      fetch("/api/gallery").then((r) => r.json()),
+      fetch("/api/categories?type=gallery").then((r) => r.json()),
+    ]).then(([galleryData, catData]) => {
+      if (Array.isArray(galleryData)) {
+        setAllImages(galleryData.map((img: { src: string; alt: string; category: string; title: string }) => ({
+          src: img.src,
+          alt: img.alt,
+          category: img.category,
+          title: img.title,
+        })));
+      }
+      if (Array.isArray(catData)) {
+        setCategories(catData);
+      }
+      setLoading(false);
+    });
+  }, []);
+
+  const allCategories = ["All", ...categories.map((c) => c.name)];
 
   const filtered =
     activeCat === "All"
@@ -28,7 +53,6 @@ export default function GalleryPage() {
 
   return (
     <main className="min-h-screen bg-bg">
-      {/* Header */}
       <div className="pt-28 pb-12 text-center">
         <p className="overline mb-3">Gallery</p>
         <h1 className="font-serif text-3xl md:text-5xl leading-tight text-fg">
@@ -36,9 +60,8 @@ export default function GalleryPage() {
         </h1>
       </div>
 
-      {/* Filter bar */}
       <div className="flex flex-wrap gap-3 mb-10 justify-center px-6">
-        {categories.map((cat) => (
+        {allCategories.map((cat) => (
           <button
             key={cat}
             onClick={() => setActiveCat(cat)}
@@ -53,33 +76,35 @@ export default function GalleryPage() {
         ))}
       </div>
 
-      {/* Masonry grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-20 columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
-        {filtered.map((img, i) => (
-          <div
-            key={i}
-            onClick={() => setLightbox(i)}
-            className="break-inside-avoid relative group cursor-pointer overflow-hidden rounded-xl"
-          >
-            <Image
-              src={img.src}
-              alt={img.alt}
-              width={600}
-              height={800}
-              className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            />
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
-              <p className="text-accent text-xs uppercase tracking-[0.1em] font-semibold">
-                {img.category}
-              </p>
-              <p className="text-white font-serif text-lg">{img.title}</p>
+      {loading ? (
+        <div className="text-center py-12 text-muted text-sm">Loading...</div>
+      ) : (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-20 columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
+          {filtered.map((img, i) => (
+            <div
+              key={i}
+              onClick={() => setLightbox(i)}
+              className="break-inside-avoid relative group cursor-pointer overflow-hidden rounded-xl"
+            >
+              <Image
+                src={img.src}
+                alt={img.alt}
+                width={600}
+                height={800}
+                className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              />
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
+                <p className="text-accent text-xs uppercase tracking-[0.1em] font-semibold">
+                  {img.category}
+                </p>
+                <p className="text-white font-serif text-lg">{img.title}</p>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
-      {/* Lightbox */}
       {lightbox !== null && (
         <div
           className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-4"
@@ -111,7 +136,6 @@ export default function GalleryPage() {
               </p>
             </div>
           </div>
-          {/* Prev / Next */}
           <button
             onClick={(e) => {
               e.stopPropagation();

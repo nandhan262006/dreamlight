@@ -1,26 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import Image from "next/image";
 
-const stories = [
-  {
-    date: "Mar 15, 2026",
-    location: "Hyderabad",
-    title: "Ananya &amp; Vikram's Royal Wedding",
-    excerpt:
-      "A three-day celebration blending tradition and modernity at the iconic Ramoji Film City, capturing every intricate detail from the mehendi to the vidai.",
-    images: ["/gallery1.png", "/gallery2.png", "/gallery3.png"],
-  },
-  {
-    date: "Feb 8, 2026",
-    location: "Goa",
-    title: "Priya &amp; Arjun's Beachside Romance",
-    excerpt:
-      "An intimate sunset ceremony on the beaches of South Goa, where the Arabian Sea provided a stunning backdrop for this love-filled celebration.",
-    images: ["/gallery4.png", "/gallery5.png", "/gallery6.png"],
-  },
-];
+interface FeaturedStoriesProps {
+  stories?: { date: string; location: string; title: string; excerpt: string; images: string[] }[];
+}
 
 function StoryCard({
   story,
@@ -33,9 +18,29 @@ function StoryCard({
   const prev = () => setImgIndex((i) => (i === 0 ? total - 1 : i - 1));
   const next = () => setImgIndex((i) => (i === total - 1 ? 0 : i + 1));
 
+  const touchStart = useRef(0);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStart.current = e.touches[0].clientX;
+  }, []);
+
+  const handleTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      const delta = touchStart.current - e.changedTouches[0].clientX;
+      if (delta > 50) next();
+      else if (delta < -50) prev();
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [total]
+  );
+
   return (
     <div className="group cursor-pointer">
-      <div className="relative aspect-[3/4] overflow-hidden rounded-2xl mb-5">
+      <div
+        className="relative aspect-[3/4] overflow-hidden rounded-2xl mb-5 touch-pan-y"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         <Image
           src={story.images[imgIndex]}
           alt={story.title}
@@ -45,7 +50,6 @@ function StoryCard({
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-        {/* Nav arrows */}
         <button
           onClick={(e) => { e.stopPropagation(); prev(); }}
           className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-white/40 cursor-pointer"
@@ -59,7 +63,6 @@ function StoryCard({
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
         </button>
 
-        {/* Dots */}
         <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
           {story.images.map((_, di) => (
             <button
@@ -72,7 +75,6 @@ function StoryCard({
           ))}
         </div>
 
-        {/* Counter */}
         <div className="absolute top-3 right-3 bg-black/40 backdrop-blur-sm text-white text-[10px] font-semibold px-2 py-0.5 rounded-full">
           {imgIndex + 1}/{total}
         </div>
@@ -93,7 +95,7 @@ function StoryCard({
   );
 }
 
-export default function FeaturedStories() {
+export default function FeaturedStories({ stories = [] }: FeaturedStoriesProps) {
   return (
     <section id="stories" className="section-gap">
       <div className="container-max">

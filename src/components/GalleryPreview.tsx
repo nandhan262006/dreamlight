@@ -2,19 +2,11 @@
 
 import Image from "next/image";
 
-const galleryImages = [
-  { src: "/gallery1.png", alt: "Wedding ceremony portrait", category: "Wedding", title: "Sacred Union" },
-  { src: "/gallery2.png", alt: "Bride closeup", category: "Portrait", title: "Radiant Smile" },
-  { src: "/gallery3.png", alt: "Couple embrace", category: "Couple", title: "Eternal Bond" },
-  { src: "/gallery4.png", alt: "Wedding decor details", category: "Details", title: "Golden Elegance" },
-  { src: "/gallery5.png", alt: "Reception celebration", category: "Wedding", title: "Celebration" },
-  { src: "/gallery6.png", alt: "First dance moment", category: "Couple", title: "First Dance" },
-  { src: "/gallery7.png", alt: "Bridal jewelry details", category: "Details", title: "Heirloom" },
-  { src: "/gallery.png", alt: "Ceremony highlights", category: "Wedding", title: "Sacred Vows" },
-  { src: "/gallery3.png", alt: "Golden hour portrait", category: "Portrait", title: "Golden Hour" },
-];
+interface GalleryPreviewProps {
+  images?: { src: string; alt: string }[];
+}
 
-export default function GalleryPreview() {
+export default function GalleryPreview({ images = [] }: GalleryPreviewProps) {
   return (
     <section id="gallery" className="section-gap">
       <div className="container-max">
@@ -26,7 +18,7 @@ export default function GalleryPreview() {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-0">
-          {galleryImages.map((img, i) => (
+          {images.map((img, i) => (
             <div
               key={i}
               className="relative group overflow-hidden aspect-[3/4]"
