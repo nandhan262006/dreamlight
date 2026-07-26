@@ -33,7 +33,7 @@ export default function CTA() {
           >
             &#64;dreamlightfilms_by_harish
           </a>
-          <a href="tel:+919573466266" className="hover:text-accent transition-colors">
+          <a href="tel:+919010334999" className="hover:text-accent transition-colors">
             &#9742; +91 90103 34999
           </a>
           <span>

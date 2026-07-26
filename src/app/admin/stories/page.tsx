@@ -38,7 +38,7 @@ export default function StoriesAdmin() {
   const [edits, setEdits] = useState<Record<number, Partial<Story>>>({});
   const [uploading, setUploading] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
-  const editFileRef = useRef<HTMLInputElement>(null);
+  const triggerFileInput = (id: string) => (document.getElementById(id) as HTMLInputElement)?.click();
   const [form, setForm] = useState({
     date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
     location: "",
@@ -84,7 +84,9 @@ export default function StoriesAdmin() {
   };
 
   const handleEditUpload = async (storyId: number, files: FileList) => {
-    const currentImages = parseImages(String(getField(storiesList.find((s) => s.id === storyId)!, "images") ?? "[]"));
+    const story = storiesList.find((s) => s.id === storyId);
+    if (!story) return;
+    const currentImages = parseImages(String(getField(story, "images") ?? "[]"));
     const newImages = [...currentImages];
     setUploading(true);
     for (const file of Array.from(files)) {
@@ -338,13 +340,13 @@ export default function StoriesAdmin() {
                                 }} className="absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center text-white text-[8px] cursor-pointer">&times;</button>
                               </div>
                             ))}
-                            <button onClick={() => editFileRef.current?.click()} className="w-14 aspect-[3/4] border border-dashed border-border rounded flex items-center justify-center text-muted text-[8px] hover:border-accent transition-colors cursor-pointer" disabled={uploading}>
+                            <button onClick={() => triggerFileInput(`edit-file-${story.id}`)} className="w-14 aspect-[3/4] border border-dashed border-border rounded flex items-center justify-center text-muted text-[8px] hover:border-accent transition-colors cursor-pointer" disabled={uploading}>
                               {uploading ? "..." : "+"}
                             </button>
                           </div>
-                          <input ref={editFileRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => {
+                          <input id={`edit-file-${story.id}`} type="file" accept="image/*" multiple className="hidden" onChange={(e) => {
                             if (e.target.files && e.target.files.length > 0) handleEditUpload(story.id, e.target.files);
-                            if (editFileRef.current) editFileRef.current.value = "";
+                            e.target.value = "";
                           }} />
                         </div>
                         <button onClick={() => saveStory(story.id)} className="text-xs text-accent hover:underline cursor-pointer mr-3">Save</button>

@@ -37,49 +37,6 @@ const fallbackGradients = [
   "linear-gradient(135deg, #1a2d2e, #0f1a1a)",
 ];
 
-const serviceList: Service[] = [
-  {
-    id: "wedding",
-    title: "Wedding Photography",
-    description:
-      "Cinematic coverage of your entire wedding day, from preparation to the final dance.",
-    imageUrl: "/gallery1.png",
-    category: "Photography",
-  },
-  {
-    id: "prewedding",
-    title: "Pre-Wedding Shoots",
-    description:
-      "Romantic storytelling sessions at breathtaking locations before the big day.",
-    imageUrl: "/gallery2.png",
-    category: "Photography",
-  },
-  {
-    id: "portrait",
-    title: "Portrait Sessions",
-    description:
-      "Professional portraits that capture your personality with artistic lighting.",
-    imageUrl: "/gallery3.png",
-    category: "Photography",
-  },
-  {
-    id: "events",
-    title: "Event Coverage",
-    description:
-      "Live-event photography for engagements, anniversaries, and celebrations.",
-    imageUrl: "/gallery4.png",
-    category: "Photography",
-  },
-  {
-    id: "maternity",
-    title: "Maternity & Newborn",
-    description:
-      "Heartwarming maternity and newborn sessions preserving life's earliest moments.",
-    imageUrl: "/gallery5.png",
-    category: "Photography",
-  },
-];
-
 function ServiceCards3D({ services, onOverflowNext, onOverflowPrev }: ServiceCards3DProps) {
   const [active, setActive] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -245,5 +202,5 @@ function ServiceCards3D({ services, onOverflowNext, onOverflowPrev }: ServiceCar
   );
 }
 
-export { type Service, serviceList };
+export { type Service };
 export default ServiceCards3D;

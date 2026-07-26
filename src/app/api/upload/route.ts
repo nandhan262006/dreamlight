@@ -18,6 +18,7 @@ export async function POST(request: NextRequest) {
   try {
     formData = await request.formData();
   } catch {
+    console.error("Failed to parse form data");
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
 
@@ -50,6 +51,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ url: result.secure_url, public_id: result.public_id });
   } catch {
+    console.error("Cloudinary upload failed");
     return NextResponse.json({ error: "Upload failed" }, { status: 500 });
   }
 }

@@ -13,7 +13,7 @@ export default async function StoriesPage() {
 
   const parsedStories = storiesData.map((s) => {
     let images: { src: string; alt: string }[] = [];
-    try { images = JSON.parse(s.images); } catch {}
+    try { images = JSON.parse(s.images); } catch { console.error("Failed to parse images for story", s.id); }
     return {
       date: s.date,
       location: s.location,

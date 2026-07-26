@@ -70,7 +70,7 @@ export default async function Home() {
         <FeaturedStories
           stories={featuredStories.map((s) => {
             let images: string[] = [];
-            try { images = JSON.parse(s.images).map((i: { src: string }) => i.src); } catch {}
+            try { images = JSON.parse(s.images).map((i: { src: string }) => i.src); } catch { console.error("Failed to parse story images for story", s.id); }
             return {
               date: s.date,
               location: s.location,

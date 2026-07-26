@@ -15,8 +15,8 @@ function StoryCard({
   const [imgIndex, setImgIndex] = useState(0);
   const total = story.images.length;
 
-  const prev = () => setImgIndex((i) => (i === 0 ? total - 1 : i - 1));
-  const next = () => setImgIndex((i) => (i === total - 1 ? 0 : i + 1));
+  const prev = useCallback(() => setImgIndex((i) => (i === 0 ? total - 1 : i - 1)), [total]);
+  const next = useCallback(() => setImgIndex((i) => (i === total - 1 ? 0 : i + 1)), [total]);
 
   const touchStart = useRef(0);
 
@@ -30,8 +30,7 @@ function StoryCard({
       if (delta > 50) next();
       else if (delta < -50) prev();
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [total]
+    [next, prev]
   );
 
   return (

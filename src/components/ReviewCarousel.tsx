@@ -35,7 +35,6 @@ function StarRating({ rating }: { rating: number }) {
 
 function ReviewCarousel({ reviews }: ReviewCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const paused = useRef(false);
 
   const doubled = [...reviews, ...reviews];
 
@@ -44,7 +43,7 @@ function ReviewCarousel({ reviews }: ReviewCarouselProps) {
     if (!el) return;
     let id = 0;
     function tick() {
-      if (!paused.current && el) {
+      if (el) {
         el.scrollLeft += 0.4;
         if (el.scrollLeft >= el.scrollWidth / 2) {
           el.scrollLeft = 0;
@@ -81,8 +80,6 @@ function ReviewCarousel({ reviews }: ReviewCarouselProps) {
         {/* Carousel */}
         <div
           ref={scrollRef}
-          onMouseEnter={() => { paused.current = true; }}
-          onMouseLeave={() => { paused.current = false; }}
           className="flex gap-4 overflow-x-scroll py-2"
           style={{ scrollbarWidth: "none" }}
         >
@@ -114,5 +111,4 @@ function ReviewCarousel({ reviews }: ReviewCarouselProps) {
   );
 }
 
-export { type Review };
 export default ReviewCarousel;
