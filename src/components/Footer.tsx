@@ -29,9 +29,9 @@ export default function Footer() {
             <Image
               src="/navibar.png"
               alt="Dreamlight Films"
-              width={120}
-              height={30}
-              className="h-14 w-auto object-contain mb-4"
+              width={180}
+              height={45}
+              className="h-auto w-44 object-contain mb-4"
             />
             <p className="text-sm leading-relaxed">
               Capturing authentic emotions, timeless traditions, and cinematic
@@ -109,7 +109,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 pt-6 border-t border-bg/10 flex flex-col sm:flex-row justify-between items-center gap-2 text-sm text-bg/40">
+        <div className="mt-12 pt-6 border-t border-bg/10 flex flex-col items-center gap-2 text-sm text-bg/40 text-center">
           <p>&copy; {new Date().getFullYear()} Dreamlight Films. All rights reserved.</p>
           <p>          <a href="https://maps.app.goo.gl/H8vb7WFD8xGrEf737" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">Opp: Sai Saroj Mayuri Theatre, Vamsi Complex, Shop No.5, Ongole</a></p>
         </div>
