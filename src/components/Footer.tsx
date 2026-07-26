@@ -111,7 +111,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-12 pt-6 border-t border-bg/10 flex flex-col sm:flex-row justify-between items-center gap-2 text-sm text-bg/40">
           <p>&copy; {new Date().getFullYear()} Dreamlight Films. All rights reserved.</p>
-          <p>Opp: Sai Saroj Mayuri Theatre, Vamsi Complex, Shop No.5, Ongole</p>
+          <p>          <a href="https://maps.app.goo.gl/H8vb7WFD8xGrEf737" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">Opp: Sai Saroj Mayuri Theatre, Vamsi Complex, Shop No.5, Ongole</a></p>
         </div>
       </div>
     </footer>

@@ -19,9 +19,6 @@ export default function CTA() {
           >
             WhatsApp Me
           </a>
-          <a href="#contact" className="btn-outline !border-bg !text-bg hover:!bg-bg hover:!text-fg text-xs">
-            Send a Message
-          </a>
         </div>
 
         <div className="flex flex-col md:flex-row items-center justify-center gap-6 text-bg/70 text-sm">
