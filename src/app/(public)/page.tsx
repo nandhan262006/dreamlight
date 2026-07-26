@@ -5,6 +5,7 @@ import GalleryPreview from "@/components/GalleryPreview";
 import ServiceCardsWithScroll from "@/components/ServiceCardsWithScroll";
 import FeaturedStories from "@/components/FeaturedStories";
 import ReviewCarousel from "@/components/ReviewCarousel";
+import MapSection from "@/components/MapSection";
 import CTA from "@/components/CTA";
 import { db } from "@/db";
 import { siteSettings, galleryImages, stories, reviews, services } from "@/db/schema";
@@ -91,6 +92,7 @@ export default async function Home() {
           }))}
         />
       </Suspense>
+      <MapSection />
       <CTA />
     </main>
   );
