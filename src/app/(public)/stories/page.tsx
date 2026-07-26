@@ -2,8 +2,20 @@ import { db } from "@/db";
 import { stories, categories } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import StoriesClient from "./StoriesClient";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Love Stories | Real Wedding Stories",
+  description:
+    "Read real wedding love stories captured by Dreamlight Films. From royal weddings to beachside romances — see how we tell each couple's unique story.",
+  openGraph: {
+    title: "Love Stories | Dreamlight Films Real Wedding Stories",
+    description:
+      "Read real wedding love stories captured by Dreamlight Films. See how we tell each couple's unique story through our lens.",
+  },
+};
 
 export default async function StoriesPage() {
   const [storiesData, categoriesData] = await Promise.all([

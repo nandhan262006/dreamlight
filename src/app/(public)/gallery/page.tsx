@@ -2,8 +2,20 @@ import { db } from "@/db";
 import { galleryImages, categories } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import GalleryClient from "./GalleryClient";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Gallery | Wedding Photography Portfolio",
+  description:
+    "Browse our wedding photography portfolio — candid moments, bridal portraits, decor details, and cinematic shots from real weddings across Ongole, Guntur, and Hyderabad.",
+  openGraph: {
+    title: "Gallery | Dreamlight Films Wedding Photography Portfolio",
+    description:
+      "Browse our wedding photography portfolio — candid moments, bridal portraits, decor details, and cinematic shots from real weddings.",
+  },
+};
 
 export default async function GalleryPage() {
   const [galleryData, categoriesData] = await Promise.all([

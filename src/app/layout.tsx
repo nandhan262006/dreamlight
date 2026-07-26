@@ -13,33 +13,70 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://dreamlight-nine.vercel.app"),
-  title: "Dreamlight Films | Wedding Photography & Videography in Ongole",
+  metadataBase: new URL("https://dreamlightfilmsbyharish.in"),
+  title: {
+    default: "Dreamlight Films | Wedding Photography & Videography in Ongole",
+    template: "%s | Dreamlight Films",
+  },
   description:
-    "Professional wedding photography and videography in Ongole, Guntur, Vijayawada, and Hyderabad. Capturing authentic emotions, timeless traditions, and cinematic memories.",
+    "Professional wedding photography and videography by Dreamlight Films. Serving Ongole, Guntur, Vijayawada, and Hyderabad. Cinematic storytelling, authentic emotions, timeless memories.",
   keywords: [
     "wedding photography",
     "wedding videography",
+    "candid wedding photographer",
+    "pre-wedding shoot",
     "photographer in Ongole",
     "photographer in Guntur",
     "photographer in Vijayawada",
     "photographer in Hyderabad",
     "Dreamlight Films",
+    "best wedding photographer Ongole",
+    "wedding cinematography",
   ],
+  creator: "Dreamlight Films",
+  publisher: "Dreamlight Films",
+  category: "Photography",
+  alternates: {
+    canonical: "https://dreamlightfilmsbyharish.in",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  icons: {
+    icon: "/favicon.ico",
+  },
   openGraph: {
     title: "Dreamlight Films | Wedding Photography & Videography in Ongole",
     description:
-      "Professional wedding photography and videography in Ongole, Guntur, Vijayawada, and Hyderabad. Capturing authentic emotions, timeless traditions, and cinematic memories.",
-    type: "website",
+      "Professional wedding photography and videography by Dreamlight Films. Cinematic storytelling, authentic emotions, timeless memories.",
+    url: "https://dreamlightfilmsbyharish.in",
     siteName: "Dreamlight Films",
-    images: [{ url: "/og-image.png", width: 1540, height: 1021 }],
+    locale: "en_IN",
+    type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1540,
+        height: 1021,
+        alt: "Dreamlight Films - Wedding Photography & Videography",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Dreamlight Films | Wedding Photography & Videography in Ongole",
+    title: "Dreamlight Films | Wedding Photography & Videography",
     description:
-      "Professional wedding photography and videography in Ongole, Guntur, Vijayawada, and Hyderabad.",
+      "Professional wedding photography and videography by Dreamlight Films. Capturing authentic emotions and timeless memories.",
     images: ["/og-image.png"],
+    creator: "@dreamlightfilms",
   },
 };
 
