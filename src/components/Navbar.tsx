@@ -47,7 +47,9 @@ export default function Navbar() {
             width={120}
             height={29}
             priority
-            className="h-29 w-auto object-contain"
+            className={`h-29 w-auto object-contain transition-opacity duration-300 ${
+              scrolled ? "opacity-100" : "opacity-100 brightness-110"
+            }`}
           />
         </Link>
 
