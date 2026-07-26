@@ -38,6 +38,7 @@ export default function StoriesAdmin() {
   const [edits, setEdits] = useState<Record<number, Partial<Story>>>({});
   const [uploading, setUploading] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const editFileRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState({
     date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
     location: "",
@@ -67,15 +68,36 @@ export default function StoriesAdmin() {
 
   useEffect(() => { fetchStories(); fetchCategories(); }, []);
 
-  const handleUpload = async (file: File) => {
+  const handleMultiUpload = async (files: FileList) => {
     setUploading(true);
-    const formData = new FormData();
-    formData.append("file", file);
-    const res = await adminFetch("/api/upload", { method: "POST", body: formData });
-    const data = await res.json();
-    if (data.url) {
-      setForm((prev) => ({ ...prev, images: [...prev.images, { src: data.url, alt: "" }] }));
+    for (const file of Array.from(files)) {
+      if (!file.type.startsWith("image/")) continue;
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await adminFetch("/api/upload", { method: "POST", body: formData });
+      const data = await res.json();
+      if (data.url) {
+        setForm((prev) => ({ ...prev, images: [...prev.images, { src: data.url, alt: "" }] }));
+      }
     }
+    setUploading(false);
+  };
+
+  const handleEditUpload = async (storyId: number, files: FileList) => {
+    const currentImages = parseImages(String(getField(storiesList.find((s) => s.id === storyId)!, "images") ?? "[]"));
+    const newImages = [...currentImages];
+    setUploading(true);
+    for (const file of Array.from(files)) {
+      if (!file.type.startsWith("image/")) continue;
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await adminFetch("/api/upload", { method: "POST", body: formData });
+      const data = await res.json();
+      if (data.url) {
+        newImages.push({ src: data.url, alt: "" });
+      }
+    }
+    updateField(storyId, "images", JSON.stringify(newImages));
     setUploading(false);
   };
 
@@ -264,9 +286,8 @@ export default function StoriesAdmin() {
                 {uploading ? "..." : "+ Add"}
               </button>
             </div>
-            <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) handleUpload(file);
+            <input ref={fileRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => {
+              if (e.target.files && e.target.files.length > 0) handleMultiUpload(e.target.files);
               if (fileRef.current) fileRef.current.value = "";
             }} />
           </div>
@@ -305,6 +326,27 @@ export default function StoriesAdmin() {
                           </label>
                         </div>
                         <textarea value={String(getField(story, "excerpt") ?? "")} onChange={(e) => updateField(story.id, "excerpt", e.target.value)} rows={2} className="w-full px-3 py-1.5 bg-bg border border-border rounded text-xs text-fg focus:outline-none focus:border-accent resize-y" />
+                        <div>
+                          <p className="text-[10px] uppercase tracking-wider text-muted font-semibold mb-1">Images</p>
+                          <div className="flex flex-wrap gap-2">
+                            {parseImages(String(getField(story, "images") ?? "[]")).map((img, i) => (
+                              <div key={i} className="relative w-14 aspect-[3/4] rounded overflow-hidden">
+                                <Image src={img.src} alt={img.alt} fill className="object-cover" />
+                                <button onClick={() => {
+                                  const current = parseImages(String(getField(story, "images") ?? "[]"));
+                                  updateField(story.id, "images", JSON.stringify(current.filter((_, j) => j !== i)));
+                                }} className="absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center text-white text-[8px] cursor-pointer">&times;</button>
+                              </div>
+                            ))}
+                            <button onClick={() => editFileRef.current?.click()} className="w-14 aspect-[3/4] border border-dashed border-border rounded flex items-center justify-center text-muted text-[8px] hover:border-accent transition-colors cursor-pointer" disabled={uploading}>
+                              {uploading ? "..." : "+"}
+                            </button>
+                          </div>
+                          <input ref={editFileRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => {
+                            if (e.target.files && e.target.files.length > 0) handleEditUpload(story.id, e.target.files);
+                            if (editFileRef.current) editFileRef.current.value = "";
+                          }} />
+                        </div>
                         <button onClick={() => saveStory(story.id)} className="text-xs text-accent hover:underline cursor-pointer mr-3">Save</button>
                         <button onClick={() => { setEdits((prev) => { const next = { ...prev }; delete next[story.id]; return next; }); setEditing(null); }} className="text-xs text-muted hover:underline cursor-pointer">Cancel</button>
                       </div>

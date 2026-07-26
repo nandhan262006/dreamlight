@@ -1,5 +1,3 @@
-"use client";
-
 export default function CTA() {
   return (
     <section id="contact" className="bg-fg section-gap">

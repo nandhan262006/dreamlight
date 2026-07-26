@@ -6,7 +6,9 @@ import { requireAuth } from "@/lib/auth";
 
 export async function GET() {
   const allStories = await db.select().from(stories).orderBy(stories.order);
-  return NextResponse.json(allStories);
+  return NextResponse.json(allStories, {
+    headers: { "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300" },
+  });
 }
 
 export async function POST(request: NextRequest) {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import Image from "next/image";
 
 interface Service {
   id: string;
@@ -199,9 +200,12 @@ function ServiceCards3D({ services, onOverflowNext, onOverflowPrev }: ServiceCar
                     transition: "all 500ms ease-out",
                   }}
                 >
-                  <div
-                    className="absolute inset-0 bg-cover bg-center"
-                    style={{ backgroundImage: `url(${service.imageUrl})` }}
+                  <Image
+                    src={service.imageUrl}
+                    alt={service.title}
+                    fill
+                    className="absolute inset-0 object-cover"
+                    sizes="340px"
                   />
                   <div
                     className="absolute inset-0 -z-[1]"

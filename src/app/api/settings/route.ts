@@ -9,7 +9,9 @@ export async function GET() {
   for (const row of rows) {
     settings[row.key] = row.value;
   }
-  return NextResponse.json(settings);
+  return NextResponse.json(settings, {
+    headers: { "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300" },
+  });
 }
 
 export async function PUT(request: NextRequest) {

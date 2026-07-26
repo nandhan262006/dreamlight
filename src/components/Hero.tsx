@@ -36,6 +36,7 @@ export default function Hero({ desktopImage = "/home.png", mobileImage = "/homem
         src={mobileImage}
         alt="Wedding photography hero"
         fill
+        priority
         className="object-cover block md:hidden"
         sizes="(max-width: 768px) 100vw, 0vw"
       />

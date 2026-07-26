@@ -60,7 +60,7 @@ async function seed() {
     { src: "/gallery5.png", alt: "Reception celebration", category: "Wedding", title: "Celebration", featured: true, order: 4 },
     { src: "/gallery6.png", alt: "First dance moment", category: "Couple", title: "First Dance", featured: true, order: 5 },
     { src: "/gallery7.png", alt: "Bridal jewelry details", category: "Details", title: "Heirloom", featured: false, order: 6 },
-    { src: "/gallery.png", alt: "Ceremony highlights", category: "Wedding", title: "Sacred Vows", featured: true, order: 7 },
+    { src: "/gallery1.png", alt: "Ceremony highlights", category: "Wedding", title: "Sacred Vows", featured: true, order: 7 },
     { src: "/gallery3.png", alt: "Golden hour portrait", category: "Portrait", title: "Golden Hour", featured: false, order: 8 },
   ];
 
@@ -85,7 +85,7 @@ async function seed() {
       date: "Jan 20, 2026", location: "Hyderabad", title: "Neha & Rahul's Traditional Elegance",
       excerpt: "A beautifully curated traditional wedding filled with vibrant colors, rich fabrics, and heartfelt rituals.",
       category: "Wedding", featured: false, order: 2,
-      images: JSON.stringify([{ src: "/gallery7.png", alt: "Traditional ceremony" }, { src: "/gallery.png", alt: "Bridal portrait" }, { src: "/gallery2.png", alt: "Decor details" }]),
+      images: JSON.stringify([{ src: "/gallery7.png", alt: "Traditional ceremony" }, { src: "/gallery1.png", alt: "Bridal portrait" }, { src: "/gallery2.png", alt: "Decor details" }]),
     },
     {
       date: "Dec 5, 2025", location: "Udaipur", title: "Kavita & Rohan's Palace Affair",
@@ -103,7 +103,7 @@ async function seed() {
       date: "Oct 22, 2025", location: "Kerala", title: "Meera & Aravind's Backwaters Story",
       excerpt: "A serene wedding set against the tranquil backwaters of Kerala, with houseboats and lush greenery framing every moment.",
       category: "Destination", featured: false, order: 5,
-      images: JSON.stringify([{ src: "/gallery.png", alt: "Backwaters setup" }, { src: "/gallery3.png", alt: "Boat portrait" }, { src: "/gallery6.png", alt: "Nature backdrop" }]),
+      images: JSON.stringify([{ src: "/gallery1.png", alt: "Backwaters setup" }, { src: "/gallery3.png", alt: "Boat portrait" }, { src: "/gallery6.png", alt: "Nature backdrop" }]),
     },
   ];
 

@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 
 interface GalleryPreviewProps {
@@ -27,6 +25,8 @@ export default function GalleryPreview({ images = [] }: GalleryPreviewProps) {
                 src={img.src}
                 alt={img.alt}
                 fill
+                loading={i === 0 ? "eager" : undefined}
+                priority={i === 0}
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
                 sizes="(max-width: 640px) 50vw, 33vw"
               />

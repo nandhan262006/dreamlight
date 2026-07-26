@@ -33,45 +33,6 @@ function StarRating({ rating }: { rating: number }) {
   );
 }
 
-const reviewList: Review[] = [
-  {
-    name: "Priya Sharma",
-    text: "Dreamlight Films captured our wedding absolutely perfectly. Every time we watch our film, we relive the emotions of that day. Harish and his team were professional, unobtrusive, and genuinely cared about getting every detail right.",
-    rating: 5,
-    date: "2 months ago",
-  },
-  {
-    name: "Ananya Reddy",
-    text: "The cinematic quality of our wedding film is beyond what we imagined. The drone shots, the editing, the music — everything came together beautifully. Thank you for preserving our memories so artfully.",
-    rating: 5,
-    date: "1 month ago",
-  },
-  {
-    name: "Neha Patel",
-    text: "From the first consultation to the final delivery, the experience was seamless. Harish has an incredible eye for detail and a gift for capturing genuine emotions. Our family still watches the film every weekend!",
-    rating: 5,
-    date: "3 months ago",
-  },
-  {
-    name: "Kavita Singh",
-    text: "We chose Dreamlight Films for our destination wedding and it was the best decision. They traveled with us, understood our vision, and delivered a film that takes our breath away every single time.",
-    rating: 5,
-    date: "2 weeks ago",
-  },
-  {
-    name: "Ritu Verma",
-    text: "The pre-wedding shoot was an experience in itself! Harish made us feel so comfortable in front of the camera, and the results were stunning. Our wedding film was equally magical. Highly recommended!",
-    rating: 5,
-    date: "1 month ago",
-  },
-  {
-    name: "Deepa Iyer",
-    text: "I cannot recommend Dreamlight Films enough. The team's dedication to their craft is evident in every frame. They didn't just document our wedding — they created a work of art that our family will treasure forever.",
-    rating: 5,
-    date: "2 months ago",
-  },
-];
-
 function ReviewCarousel({ reviews }: ReviewCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const paused = useRef(false);
@@ -153,5 +114,5 @@ function ReviewCarousel({ reviews }: ReviewCarouselProps) {
   );
 }
 
-export { type Review, reviewList };
+export { type Review };
 export default ReviewCarousel;
