@@ -15,33 +15,50 @@ export async function POST(request: NextRequest) {
   const denied = requireAuth(request);
   if (denied) return denied;
 
-  const body = await request.json();
-  const maxOrder = await db.select({ max: stories.order }).from(stories);
-  const nextOrder = (maxOrder[0]?.max ?? -1) + 1;
-  const result = await db.insert(stories).values({
-    date: body.date || new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
-    location: body.location || "",
-    title: body.title || "",
-    excerpt: body.excerpt || "",
-    category: body.category || "Wedding",
-    featured: body.featured || false,
-    images: body.images || "[]",
-    order: nextOrder,
-  }).returning();
-  return NextResponse.json(result[0]);
+  try {
+    const body = await request.json();
+    const maxOrder = await db.select({ max: stories.order }).from(stories);
+    const nextOrder = (maxOrder[0]?.max ?? -1) + 1;
+    const result = await db.insert(stories).values({
+      date: body.date || new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+      location: body.location || "",
+      title: body.title || "",
+      excerpt: body.excerpt || "",
+      category: body.category || "Wedding",
+      featured: body.featured || false,
+      images: body.images || "[]",
+      order: nextOrder,
+    }).returning();
+    return NextResponse.json(result[0]);
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
 }
 
 export async function PUT(request: NextRequest) {
   const denied = requireAuth(request);
   if (denied) return denied;
 
-  const body = await request.json();
-  const { id, ...fields } = body;
-  if (!id) return NextResponse.json({ error: "ID required" }, { status: 400 });
-  const existing = await db.select({ id: stories.id }).from(stories).where(eq(stories.id, id)).limit(1);
-  if (existing.length === 0) return NextResponse.json({ error: "Not found" }, { status: 404 });
-  await db.update(stories).set(fields).where(eq(stories.id, id));
-  return NextResponse.json({ ok: true });
+  try {
+    const body = await request.json();
+    const { id, date, location, title, excerpt, category, featured, images, order } = body;
+    if (!id) return NextResponse.json({ error: "ID required" }, { status: 400 });
+    const existing = await db.select({ id: stories.id }).from(stories).where(eq(stories.id, id)).limit(1);
+    if (existing.length === 0) return NextResponse.json({ error: "Not found" }, { status: 404 });
+    const allowed: Record<string, unknown> = {};
+    if (date !== undefined) allowed.date = date;
+    if (location !== undefined) allowed.location = location;
+    if (title !== undefined) allowed.title = title;
+    if (excerpt !== undefined) allowed.excerpt = excerpt;
+    if (category !== undefined) allowed.category = category;
+    if (featured !== undefined) allowed.featured = featured;
+    if (images !== undefined) allowed.images = images;
+    if (order !== undefined) allowed.order = order;
+    await db.update(stories).set(allowed).where(eq(stories.id, id));
+    return NextResponse.json({ ok: true });
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
 }
 
 export async function DELETE(request: NextRequest) {

@@ -15,31 +15,49 @@ export async function POST(request: NextRequest) {
   const denied = requireAuth(request);
   if (denied) return denied;
 
-  const body = await request.json();
-  const maxOrder = await db.select({ max: galleryImages.order }).from(galleryImages);
-  const nextOrder = (maxOrder[0]?.max ?? -1) + 1;
-  const result = await db.insert(galleryImages).values({
-    src: body.src,
-    alt: body.alt || "",
-    category: body.category || "Wedding",
-    title: body.title || "",
-    featured: body.featured || false,
-    order: nextOrder,
-  }).returning();
-  return NextResponse.json(result[0]);
+  try {
+    const body = await request.json();
+    if (!body.src) {
+      return NextResponse.json({ error: "src is required" }, { status: 400 });
+    }
+    const maxOrder = await db.select({ max: galleryImages.order }).from(galleryImages);
+    const nextOrder = (maxOrder[0]?.max ?? -1) + 1;
+    const result = await db.insert(galleryImages).values({
+      src: body.src,
+      alt: body.alt || "",
+      category: body.category || "Wedding",
+      title: body.title || "",
+      featured: body.featured || false,
+      order: nextOrder,
+    }).returning();
+    return NextResponse.json(result[0]);
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
 }
 
 export async function PUT(request: NextRequest) {
   const denied = requireAuth(request);
   if (denied) return denied;
 
-  const body = await request.json();
-  const { id, ...fields } = body;
-  if (!id) return NextResponse.json({ error: "ID required" }, { status: 400 });
-  const existing = await db.select({ id: galleryImages.id }).from(galleryImages).where(eq(galleryImages.id, id)).limit(1);
-  if (existing.length === 0) return NextResponse.json({ error: "Not found" }, { status: 404 });
-  await db.update(galleryImages).set(fields).where(eq(galleryImages.id, id));
-  return NextResponse.json({ ok: true });
+  try {
+    const body = await request.json();
+    const { id, src, alt, category, title, featured, order } = body;
+    if (!id) return NextResponse.json({ error: "ID required" }, { status: 400 });
+    const existing = await db.select({ id: galleryImages.id }).from(galleryImages).where(eq(galleryImages.id, id)).limit(1);
+    if (existing.length === 0) return NextResponse.json({ error: "Not found" }, { status: 404 });
+    const allowed: Record<string, unknown> = {};
+    if (src !== undefined) allowed.src = src;
+    if (alt !== undefined) allowed.alt = alt;
+    if (category !== undefined) allowed.category = category;
+    if (title !== undefined) allowed.title = title;
+    if (featured !== undefined) allowed.featured = featured;
+    if (order !== undefined) allowed.order = order;
+    await db.update(galleryImages).set(allowed).where(eq(galleryImages.id, id));
+    return NextResponse.json({ ok: true });
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
 }
 
 export async function DELETE(request: NextRequest) {

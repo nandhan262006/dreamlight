@@ -18,15 +18,22 @@ export async function PUT(request: NextRequest) {
   const denied = requireAuth(request);
   if (denied) return denied;
 
-  const body = await request.json();
-  for (const [key, value] of Object.entries(body)) {
-    await db
-      .insert(siteSettings)
-      .values({ key, value: String(value) })
-      .onConflictDoUpdate({
-        target: siteSettings.key,
-        set: { value: String(value), updatedAt: new Date() },
-      });
+  try {
+    const body = await request.json();
+    if (typeof body !== "object" || body === null || Array.isArray(body)) {
+      return NextResponse.json({ error: "Body must be an object" }, { status: 400 });
+    }
+    for (const [key, value] of Object.entries(body)) {
+      await db
+        .insert(siteSettings)
+        .values({ key, value: String(value) })
+        .onConflictDoUpdate({
+          target: siteSettings.key,
+          set: { value: String(value), updatedAt: new Date() },
+        });
+    }
+    return NextResponse.json({ ok: true });
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
-  return NextResponse.json({ ok: true });
 }

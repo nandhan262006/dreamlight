@@ -7,10 +7,51 @@ import FeaturedStories from "@/components/FeaturedStories";
 import ReviewCarousel from "@/components/ReviewCarousel";
 import MapSection from "@/components/MapSection";
 import CTA from "@/components/CTA";
+import StructuredData from "@/components/StructuredData";
 import { db } from "@/db";
 import { siteSettings, galleryImages, stories, reviews, services } from "@/db/schema";
 
 export const dynamic = "force-dynamic";
+
+const baseUrl = "https://dreamlightfilmsbyharish.in";
+
+const localBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "@id": `${baseUrl}/#business`,
+  name: "Dreamlight Films",
+  url: baseUrl,
+  logo: `${baseUrl}/navibar.png`,
+  image: `${baseUrl}/og-image.png`,
+  email: "dreamlightfilms69@gmail.com",
+  telephone: "+919573466266",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "Opp: Sai Saroj Mayuri Theatre, Vamsi Complex, Shop No.5",
+    addressLocality: "Ongole",
+    addressRegion: "Andhra Pradesh",
+    addressCountry: "IN",
+  },
+  priceRange: "$$",
+  sameAs: ["https://instagram.com/dreamlightfilms_by_harish"],
+  openingHoursSpecification: {
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+    opens: "09:00",
+    closes: "21:00",
+  },
+};
+
+const webSiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${baseUrl}/#website`,
+  url: baseUrl,
+  name: "Dreamlight Films",
+  description:
+    "Wedding Photography & Videography in Ongole, Guntur, Vijayawada, and Hyderabad. Candid wedding photographer capturing timeless moments.",
+  publisher: { "@id": `${baseUrl}/#business` },
+};
 
 function SectionSkeleton() {
   return (
@@ -40,7 +81,10 @@ export default async function Home() {
   const featuredStories = storiesData.filter((s) => s.featured);
 
   return (
-    <main>
+    <>
+      <StructuredData data={localBusinessSchema} />
+      <StructuredData data={webSiteSchema} />
+      <main>
       <Hero
         desktopImage={settings.homeImage || "/home.png"}
         mobileImage={settings.homeMobileImage || "/homemobile.png"}
@@ -95,5 +139,6 @@ export default async function Home() {
       <MapSection />
       <CTA />
     </main>
+    </>
   );
 }

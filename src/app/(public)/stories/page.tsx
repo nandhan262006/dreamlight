@@ -2,9 +2,12 @@ import { db } from "@/db";
 import { stories, categories } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import StoriesClient from "./StoriesClient";
+import StructuredData from "@/components/StructuredData";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
+
+const baseUrl = "https://dreamlightfilmsbyharish.in";
 
 export const metadata: Metadata = {
   title: "Love Stories | Real Wedding Stories",
@@ -36,15 +39,37 @@ export default async function StoriesPage() {
     };
   });
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: baseUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Love Stories",
+        item: `${baseUrl}/stories`,
+      },
+    ],
+  };
+
   return (
-    <main className="min-h-screen bg-bg">
-      <div className="pt-28 pb-12 text-center">
-        <p className="overline mb-3">Stories</p>
-        <h1 className="font-serif text-3xl md:text-5xl leading-tight text-fg">
-          Love Stories We&apos;ve Told
-        </h1>
-      </div>
-      <StoriesClient initialStories={parsedStories} categories={categoriesData} />
-    </main>
+    <>
+      <StructuredData data={breadcrumbSchema} />
+      <main className="min-h-screen bg-bg">
+        <div className="pt-28 pb-12 text-center">
+          <p className="overline mb-3">Stories</p>
+          <h1 className="font-serif text-3xl md:text-5xl leading-tight text-fg">
+            Love Stories We&apos;ve Told
+          </h1>
+        </div>
+        <StoriesClient initialStories={parsedStories} categories={categoriesData} />
+      </main>
+    </>
   );
 }
