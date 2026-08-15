@@ -16,10 +16,10 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     Promise.all([
-      fetch("/api/gallery").then((r) => r.json()),
-      fetch("/api/stories").then((r) => r.json()),
-      fetch("/api/reviews").then((r) => r.json()),
-      fetch("/api/services").then((r) => r.json()),
+      fetch("/api/gallery", { cache: "no-store" }).then((r) => r.json()),
+      fetch("/api/stories", { cache: "no-store" }).then((r) => r.json()),
+      fetch("/api/reviews", { cache: "no-store" }).then((r) => r.json()),
+      fetch("/api/services", { cache: "no-store" }).then((r) => r.json()),
     ]).then(([gallery, stories, reviews, services]) => {
       setCounts({
         gallery: Array.isArray(gallery) ? gallery.length : 0,

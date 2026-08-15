@@ -40,13 +40,19 @@ function StoryCard({
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        <Image
-          src={story.images[imgIndex]}
-          alt={story.title}
-          fill
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
-          sizes="(max-width: 768px) 100vw, 50vw"
-        />
+        {story.images.map((src, i) => (
+          <Image
+            key={i}
+            src={src}
+            alt={story.title}
+            fill
+            priority={i === 0}
+            className={`object-cover transition-all duration-500 group-hover:scale-105 ${
+              i === imgIndex ? "opacity-100" : "opacity-0"
+            }`}
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
+        ))}
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
         <button

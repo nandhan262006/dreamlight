@@ -13,7 +13,7 @@ export default function AboutSettings() {
   const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    fetch("/api/settings").then((r) => r.json()).then(setSettings);
+    fetch("/api/settings", { cache: "no-store" }).then((r) => r.json()).then(setSettings);
   }, []);
 
   const handleUpload = async (file: File) => {
@@ -83,7 +83,7 @@ export default function AboutSettings() {
               </div>
             )}
           </div>
-          <button onClick={() => fileRef.current?.click()} className="btn-outline text-xs w-full cursor-pointer" disabled={uploading}>
+          <button onClick={() => fileRef.current?.click()} className="btn-upload text-xs w-full" disabled={uploading}>
             Upload Image
           </button>
         </div>

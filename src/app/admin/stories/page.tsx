@@ -54,14 +54,14 @@ export default function StoriesAdmin() {
   const [toast, setToast] = useState<string | null>(null);
 
   const fetchStories = () => {
-    fetch("/api/stories").then((r) => r.json()).then((data) => {
+    fetch("/api/stories", { cache: "no-store" }).then((r) => r.json()).then((data) => {
       setStoriesList(Array.isArray(data) ? data : []);
       setLoading(false);
     });
   };
 
   const fetchCategories = () => {
-    fetch("/api/categories?type=stories").then((r) => r.json()).then((data) => {
+    fetch("/api/categories?type=stories", { cache: "no-store" }).then((r) => r.json()).then((data) => {
       setCategories(Array.isArray(data) ? data : []);
     });
   };
@@ -71,13 +71,22 @@ export default function StoriesAdmin() {
   const handleMultiUpload = async (files: FileList) => {
     setUploading(true);
     for (const file of Array.from(files)) {
-      if (!file.type.startsWith("image/")) continue;
+      if (!file.type.startsWith("image/")) {
+        setToast(`Skipped "${file.name}" — not an image`);
+        continue;
+      }
+      if (file.size > 20 * 1024 * 1024) {
+        setToast(`"${file.name}" is too large (max 20MB)`);
+        continue;
+      }
       const formData = new FormData();
       formData.append("file", file);
       const res = await adminFetch("/api/upload", { method: "POST", body: formData });
-      const data = await res.json();
-      if (data.url) {
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.url) {
         setForm((prev) => ({ ...prev, images: [...prev.images, { src: data.url, alt: "" }] }));
+      } else {
+        setToast(data.error || `Failed to upload "${file.name}"`);
       }
     }
     setUploading(false);
@@ -90,13 +99,22 @@ export default function StoriesAdmin() {
     const newImages = [...currentImages];
     setUploading(true);
     for (const file of Array.from(files)) {
-      if (!file.type.startsWith("image/")) continue;
+      if (!file.type.startsWith("image/")) {
+        setToast(`Skipped "${file.name}" — not an image`);
+        continue;
+      }
+      if (file.size > 20 * 1024 * 1024) {
+        setToast(`"${file.name}" is too large (max 20MB)`);
+        continue;
+      }
       const formData = new FormData();
       formData.append("file", file);
       const res = await adminFetch("/api/upload", { method: "POST", body: formData });
-      const data = await res.json();
-      if (data.url) {
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.url) {
         newImages.push({ src: data.url, alt: "" });
+      } else {
+        setToast(data.error || `Failed to upload "${file.name}"`);
       }
     }
     updateField(storyId, "images", JSON.stringify(newImages));
@@ -284,7 +302,7 @@ export default function StoriesAdmin() {
                   <button onClick={() => removeImage(i)} className="absolute top-0.5 right-0.5 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-white text-[10px] cursor-pointer">&times;</button>
                 </div>
               ))}
-              <button onClick={() => fileRef.current?.click()} className="w-20 aspect-[3/4] border-2 border-dashed border-border rounded-lg flex items-center justify-center text-muted text-[10px] hover:border-accent transition-colors cursor-pointer" disabled={uploading}>
+              <button onClick={() => fileRef.current?.click()} className="btn-upload w-20 aspect-[3/4] rounded-lg text-[10px]" disabled={uploading}>
                 {uploading ? "..." : "+ Add"}
               </button>
             </div>
@@ -340,7 +358,7 @@ export default function StoriesAdmin() {
                                 }} className="absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center text-white text-[8px] cursor-pointer">&times;</button>
                               </div>
                             ))}
-                            <button onClick={() => triggerFileInput(`edit-file-${story.id}`)} className="w-14 aspect-[3/4] border border-dashed border-border rounded flex items-center justify-center text-muted text-[8px] hover:border-accent transition-colors cursor-pointer" disabled={uploading}>
+                            <button onClick={() => triggerFileInput(`edit-file-${story.id}`)} className="btn-upload w-14 aspect-[3/4] rounded text-[8px]" disabled={uploading}>
                               {uploading ? "..." : "+"}
                             </button>
                           </div>

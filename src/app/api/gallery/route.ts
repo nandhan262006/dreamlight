@@ -7,7 +7,7 @@ import { requireAuth } from "@/lib/auth";
 export async function GET() {
   const images = await db.select().from(galleryImages).orderBy(galleryImages.order);
   return NextResponse.json(images, {
-    headers: { "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300" },
+    headers: { "Cache-Control": "no-store" },
   });
 }
 

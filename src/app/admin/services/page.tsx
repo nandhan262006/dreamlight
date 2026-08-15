@@ -30,6 +30,7 @@ export default function ServicesAdmin() {
   const [edits, setEdits] = useState<Record<number, Partial<Service>>>({});
   const [uploading, setUploading] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const editFileRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState({ title: "", description: "", imageUrl: "", category: "Photography" });
   const [showCatManager, setShowCatManager] = useState(false);
   const [newCatName, setNewCatName] = useState("");
@@ -37,14 +38,14 @@ export default function ServicesAdmin() {
   const [toast, setToast] = useState<string | null>(null);
 
   const fetchServices = () => {
-    fetch("/api/services").then((r) => r.json()).then((data) => {
+    fetch("/api/services", { cache: "no-store" }).then((r) => r.json()).then((data) => {
       setServicesList(Array.isArray(data) ? data : []);
       setLoading(false);
     });
   };
 
   const fetchCategories = () => {
-    fetch("/api/categories?type=services").then((r) => r.json()).then((data) => {
+    fetch("/api/categories?type=services", { cache: "no-store" }).then((r) => r.json()).then((data) => {
       setCategories(Array.isArray(data) ? data : []);
     });
   };
@@ -52,13 +53,23 @@ export default function ServicesAdmin() {
   useEffect(() => { fetchServices(); fetchCategories(); }, []);
 
   const handleUpload = async (file: File) => {
+    if (!file.type.startsWith("image/")) {
+      setToast("Only image files are allowed");
+      return;
+    }
+    if (file.size > 20 * 1024 * 1024) {
+      setToast("File too large (max 20MB)");
+      return;
+    }
     setUploading(true);
     const formData = new FormData();
     formData.append("file", file);
                           const res = await adminFetch("/api/upload", { method: "POST", body: formData });
-    const data = await res.json();
-    if (data.url) {
+    const data = await res.json().catch(() => ({}));
+    if (res.ok && data.url) {
       setForm((prev) => ({ ...prev, imageUrl: data.url }));
+    } else {
+      setToast(data.error || "Upload failed");
     }
     setUploading(false);
   };
@@ -221,7 +232,7 @@ export default function ServicesAdmin() {
                 <button onClick={() => setForm((p) => ({ ...p, imageUrl: "" }))} className="absolute top-1 right-1 w-5 h-5 bg-black/50 rounded-full flex items-center justify-center text-white text-[10px] cursor-pointer">&times;</button>
               </div>
             ) : (
-              <button onClick={() => fileRef.current?.click()} className="w-32 aspect-[3/4] border-2 border-dashed border-border rounded-lg flex items-center justify-center text-muted text-xs hover:border-accent transition-colors cursor-pointer flex-shrink-0" disabled={uploading}>
+              <button onClick={() => fileRef.current?.click()} className="btn-upload w-32 aspect-[3/4] rounded-lg text-xs flex-shrink-0" disabled={uploading}>
                 {uploading ? "..." : "Upload"}
               </button>
             )}
@@ -257,7 +268,7 @@ export default function ServicesAdmin() {
                         {categories.map((c) => <option key={c.id} value={c.name}>{c.name}</option>)}
                         {categories.length === 0 && <option value="Photography">Photography</option>}
                       </select>
-                      <input type="file" accept="image/*" onChange={async (e) => {
+                      <input ref={editFileRef} type="file" accept="image/*" className="hidden" onChange={async (e) => {
                         const file = e.target.files?.[0];
                         if (file) {
                           const formData = new FormData();
@@ -266,7 +277,8 @@ export default function ServicesAdmin() {
                           const data = await res.json();
                           if (data.url) updateField(service.id, "imageUrl", data.url);
                         }
-                      }} className="text-xs text-muted" />
+                      }} />
+                      <button onClick={() => editFileRef.current?.click()} className="btn-upload w-full py-1.5 text-xs" disabled={uploading}>Replace Image</button>
                       <button onClick={() => saveService(service.id)} className="text-xs text-accent hover:underline cursor-pointer mr-3">Save</button>
                       <button onClick={() => { setEdits((prev) => { const next = { ...prev }; delete next[service.id]; return next; }); setEditing(null); }} className="text-xs text-muted hover:underline cursor-pointer">Cancel</button>
                     </div>

@@ -14,7 +14,7 @@ export default function HomepageSettings() {
   const mobileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    fetch("/api/settings").then((r) => r.json()).then(setSettings);
+    fetch("/api/settings", { cache: "no-store" }).then((r) => r.json()).then(setSettings);
   }, []);
 
   const handleUpload = async (key: string, file: File) => {
@@ -71,7 +71,7 @@ export default function HomepageSettings() {
               </div>
             )}
           </div>
-          <button onClick={() => desktopRef.current?.click()} className="btn-outline text-xs w-full cursor-pointer" disabled={uploading !== null}>
+          <button onClick={() => desktopRef.current?.click()} className="btn-upload text-xs w-full" disabled={uploading !== null}>
             Upload New Image
           </button>
         </div>
@@ -94,7 +94,7 @@ export default function HomepageSettings() {
               </div>
             )}
           </div>
-          <button onClick={() => mobileRef.current?.click()} className="btn-outline text-xs w-full cursor-pointer" disabled={uploading !== null}>
+          <button onClick={() => mobileRef.current?.click()} className="btn-upload text-xs w-full" disabled={uploading !== null}>
             Upload New Image
           </button>
         </div>

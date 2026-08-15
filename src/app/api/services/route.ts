@@ -7,7 +7,7 @@ import { requireAuth } from "@/lib/auth";
 export async function GET() {
   const allServices = await db.select().from(services).orderBy(services.order);
   return NextResponse.json(allServices, {
-    headers: { "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300" },
+    headers: { "Cache-Control": "no-store" },
   });
 }
 

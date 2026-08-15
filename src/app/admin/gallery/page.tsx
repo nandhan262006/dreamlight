@@ -38,14 +38,14 @@ export default function GalleryAdmin() {
   const [edits, setEdits] = useState<Record<number, Partial<GalleryImage>>>({});
 
   const fetchImages = () => {
-    fetch("/api/gallery").then((r) => r.json()).then((data) => {
+    fetch("/api/gallery", { cache: "no-store" }).then((r) => r.json()).then((data) => {
       setImages(Array.isArray(data) ? data : []);
       setLoading(false);
     });
   };
 
   const fetchCategories = () => {
-    fetch("/api/categories?type=gallery").then((r) => r.json()).then((data) => {
+    fetch("/api/categories?type=gallery", { cache: "no-store" }).then((r) => r.json()).then((data) => {
       setCategories(Array.isArray(data) ? data : []);
     });
   };
@@ -63,13 +63,23 @@ export default function GalleryAdmin() {
   };
 
   const handleUpload = async (file: File) => {
+    if (!file.type.startsWith("image/")) {
+      setToast("Only image files are allowed");
+      return;
+    }
+    if (file.size > 20 * 1024 * 1024) {
+      setToast("File too large (max 20MB)");
+      return;
+    }
     setUploading(true);
     const formData = new FormData();
     formData.append("file", file);
     const res = await adminFetch("/api/upload", { method: "POST", body: formData });
-    const data = await res.json();
-    if (data.url) {
+    const data = await res.json().catch(() => ({}));
+    if (res.ok && data.url) {
       setForm((prev) => ({ ...prev, src: data.url }));
+    } else {
+      setToast(data.error || "Upload failed");
     }
     setUploading(false);
   };
@@ -227,7 +237,7 @@ export default function GalleryAdmin() {
               <button onClick={() => setForm((p) => ({ ...p, src: "" }))} className="absolute top-1 right-1 w-6 h-6 bg-black/50 rounded-full flex items-center justify-center text-white text-xs cursor-pointer">&times;</button>
             </div>
           ) : (
-            <button onClick={() => fileRef.current?.click()} className="w-40 aspect-[3/4] border-2 border-dashed border-border rounded-lg flex items-center justify-center text-muted text-sm hover:border-accent transition-colors cursor-pointer mb-4" disabled={uploading}>
+            <button onClick={() => fileRef.current?.click()} className="btn-upload w-40 aspect-[3/4] rounded-lg text-sm mb-4" disabled={uploading}>
               {uploading ? "Uploading..." : "Upload"}
             </button>
           )}

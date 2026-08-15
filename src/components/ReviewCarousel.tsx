@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 
 interface Review {
   name: string;
@@ -35,6 +35,7 @@ function StarRating({ rating }: { rating: number }) {
 
 function ReviewCarousel({ reviews }: ReviewCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [paused, setPaused] = useState(false);
 
   const doubled = [...reviews, ...reviews];
 
@@ -42,18 +43,23 @@ function ReviewCarousel({ reviews }: ReviewCarouselProps) {
     const el = scrollRef.current;
     if (!el) return;
     let id = 0;
-    function tick() {
-      if (el) {
-        el.scrollLeft += 0.4;
+    let last = performance.now();
+    function tick(now: number) {
+      if (el && !paused && el.scrollWidth > el.clientWidth) {
+        const dt = now - last;
+        last = now;
+        el.scrollLeft += 0.06 * dt;
         if (el.scrollLeft >= el.scrollWidth / 2) {
           el.scrollLeft = 0;
         }
+      } else {
+        last = now;
       }
       id = requestAnimationFrame(tick);
     }
     id = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(id);
-  }, []);
+  }, [paused]);
 
   return (
     <section id="reviews" className="bg-surface-muted section-gap">
@@ -80,7 +86,9 @@ function ReviewCarousel({ reviews }: ReviewCarouselProps) {
         {/* Carousel */}
         <div
           ref={scrollRef}
-          className="flex gap-4 overflow-x-scroll py-2"
+          onTouchStart={() => setPaused(true)}
+          onTouchEnd={() => setPaused(false)}
+          className="flex gap-4 overflow-x-auto py-2 touch-pan-y"
           style={{ scrollbarWidth: "none" }}
         >
           {doubled.map((review, i) => (

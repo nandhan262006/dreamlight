@@ -23,7 +23,7 @@ export default function ReviewsAdmin() {
   const [toast, setToast] = useState<string | null>(null);
 
   const fetchReviews = () => {
-    fetch("/api/reviews").then((r) => r.json()).then((data) => {
+    fetch("/api/reviews", { cache: "no-store" }).then((r) => r.json()).then((data) => {
       setReviewsList(Array.isArray(data) ? data : []);
       setLoading(false);
     });

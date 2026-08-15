@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import Image from "next/image";
 
 interface StoryImage {
@@ -28,19 +28,55 @@ function StoryCard({ story }: { story: Story }) {
   const [imgIndex, setImgIndex] = useState(0);
   const total = story.images.length;
 
-  const prev = () => setImgIndex((i) => (i === 0 ? total - 1 : i - 1));
-  const next = () => setImgIndex((i) => (i === total - 1 ? 0 : i + 1));
+  const prev = useCallback(() => setImgIndex((i) => (i === 0 ? total - 1 : i - 1)), [total]);
+  const next = useCallback(() => setImgIndex((i) => (i === total - 1 ? 0 : i + 1)), [total]);
+
+  const touchStart = useRef(0);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStart.current = e.touches[0].clientX;
+  }, []);
+
+  const handleTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      const delta = touchStart.current - e.changedTouches[0].clientX;
+      if (delta > 50) next();
+      else if (delta < -50) prev();
+    },
+    [next, prev]
+  );
 
   return (
     <div className="group">
-      <div className="relative aspect-[3/4] overflow-hidden rounded-2xl mb-5">
-        <Image
-          src={story.images[imgIndex]?.src || "/gallery1.png"}
-          alt={story.images[imgIndex]?.alt || story.title}
-          fill
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
-          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-        />
+      <div
+        className="relative aspect-[3/4] overflow-hidden rounded-2xl mb-5 touch-pan-y"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        {story.images.length > 0 ? (
+          story.images.map((img, i) => (
+            <Image
+              key={i}
+              src={img.src}
+              alt={img.alt || story.title}
+              fill
+              priority={i === 0}
+              className={`object-cover transition-all duration-500 group-hover:scale-105 ${
+                i === imgIndex ? "opacity-100" : "opacity-0"
+              }`}
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            />
+          ))
+        ) : (
+          <Image
+            src="/gallery1.png"
+            alt={story.title}
+            fill
+            priority
+            className="object-cover transition-all duration-500 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          />
+        )}
 
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 

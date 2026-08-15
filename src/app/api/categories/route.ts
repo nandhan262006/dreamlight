@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
   const where = type ? eq(categories.type, type) : undefined;
   const all = await db.select().from(categories).where(where).orderBy(categories.order);
   return NextResponse.json(all, {
-    headers: { "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300" },
+    headers: { "Cache-Control": "no-store" },
   });
 }
 
